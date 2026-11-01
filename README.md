@@ -1,34 +1,67 @@
-# Damp and Mould Hazard Reporting (Awaab's Law prototype)
 
-A small Python prototype for a local authority. Council tenants report a
-damp or mould hazard and the system works out the legal deadlines the
-council must meet under Awaab's Law (phase 1, from 27 October 2025).
+# Damp and Mould Hazard Reporting
 
-## User story
+This is a small Awaab's law Python project which enables council tenants to submit complaints about damp/mould and works out   timeframes for addressing these issues and focuses on rules introduced on 27 October 2025. This is basic prototype for demonstrating requirements and testing not a complete council reporting system.
 
-As a council tenant living with damp or mould,
-I want to report the problem online and see when it must be dealt with,
-so that I know the council is meeting its legal deadlines.
+## User Story
 
-## Acceptance criteria
+I am a council tenant and want to report that my home is damp or has mould in it and know when council should do something about it.
 
-1. A report needs a tenant name, a tenancy reference (HT-123456), a hazard
-   level (emergency or significant) and a description of at least 15 characters.
-2. A report cannot be dated in the future.
-3. Emergency hazards must be investigated within 24 hours.
-4. Significant hazards must be investigated within 10 working days
-   (weekends and bank holidays do not count).
-5. A written summary is due within 3 working days of the investigation finishing.
-6. Every accepted report gets a unique reference starting DMR-.
+## What Program Does
 
-## How to run
+- Takes tenant's name and tenancy reference (e.g. HT-123456).
+- Takes care of critical and emergency hazard reports.
+- Must be at least 15 characters long.
+- Does not accept reports from date in future.
+- Estimates a 24-hour period for emergency hazards.
+- Estimates investigation time of 10 working days for significant hazards (excluding weekends and bank holidays).
+- Calculates when summary is due (3 working days after investigation).
+- Gives each accepted report a unique reference starting with DMR.
 
-```
+## How to Run
+
+Create virtual environment:
+
+```bash
 python -m venv venv
-venv\Scripts\activate          (Windows)
-source venv/bin/activate       (Mac/Linux)
+```
+
+Activate it
+
+Windows:
+```bash
+venv\Scripts\activate
+```
+
+Mac/Linux:
+```bash
+source venv/bin/activate
+```
+
+Install required packages:
+
+```bash
 pip install -r requirements.txt
+```
+
+Run BDD tests:
+
+```bash
 behave
+```
+
+Run unit tests:
+
+```bash
 pytest
 ```
-Results: 3 scenarios (7 test cases) passing, 5 unit tests passing.
+
+## Test Results
+
+  project has:
+- 3 BDD scenarios (7 test cases)
+- 5 unit tests
+
+All tests passed in documented run.
+
+
