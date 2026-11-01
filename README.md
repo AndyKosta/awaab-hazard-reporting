@@ -31,3 +31,4 @@ pip install -r requirements.txt
 behave
 pytest
 ```
+Results: 3 scenarios (7 test cases) passing, 5 unit tests passing.
