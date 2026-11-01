@@ -1,0 +1,58 @@
+Feature: Report a damp or mould hazard # features/report_hazard.feature:1
+  As a council tenant living with damp or mould
+  I want to report the problem online and see when it must be dealt with
+  So that I know the council is meeting its legal deadlines under Awaab's Law
+  Feature: Report a damp or mould hazard  # features/report_hazard.feature:1
+
+  Scenario: Tenant reports an emergency hazard on a Friday afternoon         # features/report_hazard.feature:9
+    Given the current time is "2026-12-18 16:00"                             # features/steps/hazard_steps.py:15
+    When "Amina Khan" with tenancy "HT-104522" reports an "emergency" hazard # features/steps/hazard_steps.py:26
+      | description                                          | reported_at      |
+      | Black mould around the baby's cot and window leaking | 2026-12-18 15:30 |
+    Then the report is accepted with a reference starting "DMR-"             # features/steps/hazard_steps.py:44
+    And the investigation deadline is "2026-12-19 15:30"                     # features/steps/hazard_steps.py:50
+
+  Scenario: Significant hazard reported just before the Christmas bank holidays                  # features/report_hazard.feature:16
+    Given the current time is "2026-12-18 16:00"                                                 # features/steps/hazard_steps.py:15
+    When "John Smith" with tenancy "HT-209871" reports a "significant" hazard                    # features/steps/hazard_steps.py:26
+      | description                                   | reported_at      |
+      | Damp patches spreading on the bedroom ceiling | 2026-12-18 09:15 |
+    Then the report is accepted with a reference starting "DMR-"                                 # features/steps/hazard_steps.py:44
+    And the investigation deadline is "2027-01-06 17:00"                                         # features/steps/hazard_steps.py:50
+    And if the investigation finishes on "2027-01-06" the written summary is due by "2027-01-11" # features/steps/hazard_steps.py:57
+
+  Scenario Outline: Invalid reports are rejected with a clear message -- @1.1   # features/report_hazard.feature:32
+    Given the current time is "2026-12-18 16:00"                                # features/steps/hazard_steps.py:15
+    When "" with tenancy "HT-104522" reports a "significant" hazard             # features/steps/hazard_steps.py:26
+      | description               | reported_at      |
+      | Mould on the kitchen wall | 2026-12-18 10:00 |
+    Then the report is rejected with the message "Tenant name is required"      # features/steps/hazard_steps.py:63
+
+  Scenario Outline: Invalid reports are rejected with a clear message -- @1.2                 # features/report_hazard.feature:33
+    Given the current time is "2026-12-18 16:00"                                              # features/steps/hazard_steps.py:15
+    When "Amina Khan" with tenancy "104522" reports a "significant" hazard                    # features/steps/hazard_steps.py:26
+      | description               | reported_at      |
+      | Mould on the kitchen wall | 2026-12-18 10:00 |
+    Then the report is rejected with the message "Tenancy reference must look like HT-123456" # features/steps/hazard_steps.py:63
+
+  Scenario Outline: Invalid reports are rejected with a clear message -- @1.3                    # features/report_hazard.feature:34
+    Given the current time is "2026-12-18 16:00"                                                 # features/steps/hazard_steps.py:15
+    When "Amina Khan" with tenancy "HT-104522" reports a "minor" hazard                          # features/steps/hazard_steps.py:26
+      | description               | reported_at      |
+      | Mould on the kitchen wall | 2026-12-18 10:00 |
+    Then the report is rejected with the message "Hazard level must be emergency or significant" # features/steps/hazard_steps.py:63
+
+  Scenario Outline: Invalid reports are rejected with a clear message -- @1.4                            # features/report_hazard.feature:35
+    Given the current time is "2026-12-18 16:00"                                                         # features/steps/hazard_steps.py:15
+    When "Amina Khan" with tenancy "HT-104522" reports a "significant" hazard                            # features/steps/hazard_steps.py:26
+      | description | reported_at      |
+      | Mould       | 2026-12-18 10:00 |
+    Then the report is rejected with the message "Please describe the problem in at least 15 characters" # features/steps/hazard_steps.py:63
+
+  Scenario Outline: Invalid reports are rejected with a clear message -- @1.5          # features/report_hazard.feature:36
+    Given the current time is "2026-12-18 16:00"                                       # features/steps/hazard_steps.py:15
+    When "Amina Khan" with tenancy "HT-104522" reports a "significant" hazard          # features/steps/hazard_steps.py:26
+      | description               | reported_at      |
+      | Mould on the kitchen wall | 2026-12-18 16:01 |
+    Then the report is rejected with the message "Report time cannot be in the future" # features/steps/hazard_steps.py:63
+
